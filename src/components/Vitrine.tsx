@@ -107,7 +107,7 @@ export default function Vitrine() {
                   disabled={!has}
                   aria-pressed={active}
                   title={c.label}
-                  className={`h-6 w-6 border transition-all ${
+                  className={`h-8 w-8 touch-manipulation border transition-all sm:h-6 sm:w-6 ${
                     active
                       ? "border-oxblood ring-1 ring-oxblood ring-offset-2 ring-offset-bone"
                       : "border-ink/25 hover:border-ink/60"
@@ -185,7 +185,7 @@ function ModelCard({
             src={variant.image}
             alt={`${model.name} — ${colorOf(variant.color).label}`}
             fill
-            quality={100}
+            quality={85}
             className="object-contain p-6 mix-blend-multiply transition-transform duration-700 ease-editorial group-hover:scale-105"
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           />
@@ -204,7 +204,7 @@ function ModelCard({
                 onClick={() => setRef(v.ref)}
                 title={colorOf(v.color).label}
                 aria-pressed={v.ref === ref}
-                className={`pointer-events-auto h-6 w-6 rounded-full border shadow-sm transition-all ${
+                className={`pointer-events-auto h-8 w-8 touch-manipulation rounded-full border shadow-sm transition-all sm:h-6 sm:w-6 ${
                   v.ref === ref
                     ? "border-oxblood ring-2 ring-oxblood ring-offset-2 ring-offset-bone"
                     : "border-ink/20 hover:border-ink/60"

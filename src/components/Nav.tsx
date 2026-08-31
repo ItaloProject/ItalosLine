@@ -54,7 +54,7 @@ export default function Nav() {
             </a>
             <button
               onClick={() => setOpen(true)}
-              className="tag text-ink md:hidden"
+              className="tag -m-3 touch-manipulation p-3 text-ink md:hidden"
               aria-label="Abrir menu"
             >
               Índice +
@@ -76,7 +76,7 @@ export default function Nav() {
               <button
                 onClick={() => setOpen(false)}
                 aria-label="Fechar"
-                className="tag text-ink"
+                className="tag -m-3 touch-manipulation p-3 text-ink"
               >
                 Fechar ×
               </button>

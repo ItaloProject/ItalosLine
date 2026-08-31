@@ -49,15 +49,25 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
+  width: 100%;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
   position: relative;
+  width: 100%;
+  max-width: 100vw;
   background-color: rgb(var(--c-bone));
   color: rgb(var(--c-ink));
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
+}
+
+img, video {
+  max-width: 100%;
+  height: auto;
 }
 
 /* Evita que o fundo escuro do body apareça no overscroll da página clara. */

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Fraunces, Spline_Sans_Mono, Archivo } from "next/font/google";
 import "./globals.css";
 import WhatsApp from "@/components/WhatsApp";
@@ -35,6 +35,13 @@ export const metadata: Metadata = {
     description: "Arquivo Nº 01 · Estação Um.",
     type: "website",
   },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: "#0f0d0b",
 };
 
 export default function RootLayout({

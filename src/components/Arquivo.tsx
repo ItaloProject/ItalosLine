@@ -94,7 +94,7 @@ export default function Arquivo() {
                           src={item.image}
                           alt={item.title}
                           fill
-                          quality={CYCLES[item.n] ? 100 : undefined}
+                          quality={CYCLES[item.n] ? 85 : undefined}
                           className={CYCLES[item.n] ? "object-contain p-1 mix-blend-multiply" : "object-cover"}
                           sizes="56px"
                         />
@@ -131,7 +131,7 @@ export default function Arquivo() {
                       src={panelSrc}
                       alt={index[hover].title}
                       fill
-                      quality={cycle ? 100 : undefined}
+                      quality={cycle ? 85 : undefined}
                       className={cycle ? "object-contain p-4 mix-blend-multiply" : "object-cover"}
                       sizes="30vw"
                     />
