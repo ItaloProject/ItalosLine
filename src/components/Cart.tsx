@@ -125,7 +125,11 @@ export default function Cart() {
                       key={i.key}
                       className="flex gap-4 border-b border-ink/10 py-5"
                     >
-                      <div className="relative h-24 w-20 shrink-0 overflow-hidden border border-ink/15 bg-surface">
+                      {/* Fundo claro fixo: as fotos têm fundo branco e o
+                          mix-blend-multiply precisa de base clara. O painel
+                          usa o tema escuro, onde bg-surface deixaria a peça
+                          preta sobre preto. */}
+                      <div className="relative h-24 w-20 shrink-0 overflow-hidden border border-ink/15 bg-[#ECE8DF]">
                         {i.image && (
                           <Image
                             src={i.image}

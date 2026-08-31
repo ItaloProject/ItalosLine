@@ -67,7 +67,12 @@ npm run dev
 
 - ~~Número de WhatsApp placeholder~~ — **resolvido**. Número real (+55 99 98449-1810) centralizado em [`src/lib/contact.ts`](src/lib/contact.ts); o botão flutuante e o rodapé importam de lá. Para trocar no futuro, mexer só nesse arquivo.
 - **Links sociais do rodapé** (Instagram, Pinterest, Newsletter) ainda apontam para `#` — faltam as URLs reais.
-- **Formulário "Sob Medida"** (`src/components/MadeToMeasure.tsx`) só atualiza estado local ao enviar — não manda e-mail nem WhatsApp de verdade ainda.
+- **Grade de tamanhos é inventada.** O campo `sizes` de cada modelo em [`src/lib/vitrine.ts`](src/lib/vitrine.ts) foi preenchido com uma variação plausível (alguns modelos sem P, outros sem XG) para o filtro ter o que filtrar. **Precisa ser trocado pela disponibilidade real.**
+- **Checkout sai pelo WhatsApp.** Não há gateway de pagamento: a sacola monta a mensagem do pedido e abre o WhatsApp da loja. Se um dia entrar pagamento online, o ponto a mexer é `checkoutUrl` em [`src/lib/cart.tsx`](src/lib/cart.tsx).
+- **Estoque não é controlado** — dá para adicionar qualquer quantidade de qualquer peça.
+- **Formulário "Sob Medida"** (`src/components/MadeToMeasure.tsx`) só atualiza estado local ao enviar — não manda e-mail nem WhatsApp de verdade ainda. Com a sacola no ar, vale decidir se essa seção ainda faz sentido como está (ver ponto de copy abaixo).
+- **Copy da seção "Sob Medida" está desalinhada com a virada para venda pronta**: o título ainda é "03 — Sob Medida", o texto fala em "reserve uma prova privada no ateliê" e a lista de peças (Blazer/Terno, Calça, Colete) não bate com o catálogo real (camisas, bermudas, polos, kits).
+- **Origem dos tecidos** ainda diz "São Paulo, Brasil" em 20 pontos de `vitrine.ts`/`data.ts`. É a origem do *tecido*, não da marca — foi deixado de propósito quando a cidade da marca virou Bacabal. Confirmar se deve mudar.
 - **Favicon/OG image**: só existe o `icon.svg` gerado automaticamente pelo Next; não há imagem de Open Graph customizada para compartilhamento em redes sociais.
 
 ## Estrutura de páginas
