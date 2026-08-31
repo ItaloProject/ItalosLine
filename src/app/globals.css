@@ -1,0 +1,151 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-serif: "Fraunces", Georgia, serif;
+  --font-mono: "Spline Sans Mono", ui-monospace, monospace;
+  --font-sans: "Archivo", system-ui, sans-serif;
+
+  /* Paleta em canais RGB para que os modificadores de opacidade do
+     Tailwind (bg-ink/15) continuem funcionando. Tema escuro — padrão. */
+  --c-bone: 15 13 11;
+  --c-bone-dark: 8 7 6;
+  --c-bone-deep: 4 3 2;
+  --c-ink: 245 240 232;
+  --c-ink-soft: 200 192 180;
+  --c-ink-faint: 138 130 120;
+  --c-surface: 26 23 20;
+  --c-oxblood: 110 43 43;
+  --c-oxbright: 160 64 64;
+
+  --rule: rgba(232, 226, 212, 0.05);
+  --grain: 0.04;
+}
+
+/* Tema claro — usado na Vitrine. Redefine só os tokens; nenhum componente
+   precisa saber em qual tema está. */
+.theme-light {
+  --c-bone: 250 249 246;
+  --c-bone-dark: 255 255 255;
+  --c-bone-deep: 238 234 227;
+  --c-ink: 26 23 20;
+  --c-ink-soft: 92 85 78;
+  --c-ink-faint: 142 134 124;
+  --c-surface: 244 241 235;
+  --c-oxblood: 110 43 43;
+  --c-oxbright: 138 52 52;
+
+  --rule: rgba(26, 23, 20, 0.07);
+  --grain: 0.03;
+
+  background-color: rgb(var(--c-bone));
+  color: rgb(var(--c-ink));
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  position: relative;
+  background-color: rgb(var(--c-bone));
+  color: rgb(var(--c-ink));
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* Evita que o fundo escuro do body apareça no overscroll da página clara. */
+body:has(.theme-light) {
+  background-color: #faf9f6;
+}
+
+::selection {
+  background: rgb(var(--c-oxblood));
+  color: #f5f0e8;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #080706;
+}
+::-webkit-scrollbar-thumb {
+  background: #2a2420;
+  border: 3px solid #0f0d0b;
+  border-radius: 0;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #6e2b2b;
+}
+
+.tnum {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+.tag {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+/* Textura de papel — blend overlay funciona em fundo escuro */
+.paper::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: var(--grain);
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Fios de coluna — acompanham o tema */
+.rules {
+  background-image: linear-gradient(to right, var(--rule) 1px, transparent 1px);
+  background-size: calc(100% / 6) 100%;
+}
+
+.link-underline {
+  position: relative;
+}
+.link-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  height: 1px;
+  width: 100%;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.link-underline:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* Contorno de texto — acompanha o tema */
+.text-outline {
+  color: transparent;
+  -webkit-text-stroke: 1.2px rgb(var(--c-ink) / 0.85);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

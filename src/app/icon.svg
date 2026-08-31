@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <rect width="32" height="32" fill="#0F0D0B"/>
+  <text
+    x="16" y="22"
+    font-family="Georgia, serif"
+    font-size="15"
+    font-style="italic"
+    font-weight="300"
+    text-anchor="middle"
+    fill="#F5F0E8"
+    letter-spacing="-0.5"
+  >IL</text>
+</svg>
