@@ -48,13 +48,13 @@ export default function Hero() {
     targetVideo.addEventListener("ended", handleEnded, { once: true });
 
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const alreadyPlayed = sessionStorage.getItem("il-hero-intro") === "1";
 
     const unlockScroll = () => { document.body.style.overflow = ""; };
 
     const ctx = gsap.context(() => {
-      if (reduced) {
+      if (reduced || alreadyPlayed) {
         flyerVideo.pause();
-        targetVideo.pause();
         gsap.set(flyer, { autoAlpha: 0 });
         gsap.set([title1, title2], { yPercent: 0 });
         gsap.set(
@@ -62,6 +62,12 @@ export default function Hero() {
            ctaRef.current, topBarRef.current, bottomBarRef.current],
           { x: 0, y: 0, autoAlpha: 1 }
         );
+        if (reduced) {
+          targetVideo.pause();
+        } else {
+          targetVideo.currentTime = 0;
+          void targetVideo.play().catch(() => undefined);
+        }
         return;
       }
 
@@ -104,10 +110,10 @@ export default function Hero() {
         }, 0)
         .to([title1, title2], {
           yPercent: 0,
-          duration: 1.1,
+          duration: 0.75,
           ease: "power4.out",
-          stagger: 0.12,
-        }, 0.75)
+          stagger: 0.1,
+        }, 0.2)
 
         // 2 ▸ Troca flyer → vídeo no quadro
         .call(() => {
@@ -116,16 +122,17 @@ export default function Hero() {
         })
         .to(targetVideo, { autoAlpha: 1, duration: 0.28, ease: "power2.out" })
         .to(flyer,       { autoAlpha: 0, duration: 0.28, ease: "power2.out" }, "<")
+        .call(() => {
+          unlockScroll();
+          sessionStorage.setItem("il-hero-intro", "1");
+        })
 
         // 3 ▸ Interface
         .to(topBarRef.current, { autoAlpha: 1, y: 0, duration: 0.7,  ease: "power3.out" }, "-=0.25")
         .to(tagRef.current,    { yPercent: 0,  duration: 0.9,  ease: "power4.out" }, "-=0.55")
-
-        // 4 ▸ Copy e CTA
-        .to(copyRef.current,      { autoAlpha: 1, y: 0, duration: 0.8, ease: "power3.out" }, "+=2.4")
+        .to(copyRef.current,      { autoAlpha: 1, y: 0, duration: 0.8, ease: "power3.out" }, "-=0.3")
         .to(ctaRef.current,       { autoAlpha: 1, y: 0, duration: 0.8, ease: "power3.out" }, "-=0.6")
-        .to(bottomBarRef.current, { autoAlpha: 1, y: 0, duration: 0.7, ease: "power3.out" }, "-=0.55")
-        .call(unlockScroll);
+        .to(bottomBarRef.current, { autoAlpha: 1, y: 0, duration: 0.7, ease: "power3.out" }, "-=0.55");
 
       // ── Parallax ─────────────────────────────────────────────────────
       gsap.to(mastheadRef.current, {
