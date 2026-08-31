@@ -1,5 +1,4 @@
-const WA = "https://wa.me/5511999999999?text=" +
-  encodeURIComponent("Olá! Vim pelo site da ItalosLine e gostaria de agendar uma prova.");
+import { WHATSAPP_URL } from "@/lib/contact";
 
 type Col = { title: string; links: { label: string; href: string; external?: boolean }[] };
 
@@ -27,7 +26,7 @@ const cols: Col[] = [
     links: [
       { label: "Instagram",  href: "#" },
       { label: "Pinterest",  href: "#" },
-      { label: "WhatsApp",   href: WA, external: true },
+      { label: "WhatsApp",   href: WHATSAPP_URL, external: true },
       { label: "Newsletter", href: "#" },
     ],
   },

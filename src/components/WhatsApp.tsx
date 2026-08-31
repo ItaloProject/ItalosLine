@@ -1,12 +1,9 @@
-const PHONE   = "5511999999999"; // substitua pelo número real (DDI + DDD + número)
-const MESSAGE = encodeURIComponent(
-  "Olá! Vim pelo site da ItalosLine e gostaria de agendar uma prova."
-);
+import { WHATSAPP_URL } from "@/lib/contact";
 
 export default function WhatsApp() {
   return (
     <a
-      href={`https://wa.me/${PHONE}?text=${MESSAGE}`}
+      href={WHATSAPP_URL}
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Falar conosco no WhatsApp"

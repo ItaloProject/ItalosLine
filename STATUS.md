@@ -65,7 +65,7 @@ npm run dev
 
 ## Pendências conhecidas
 
-- **Número de WhatsApp é placeholder**: `5511999999999` em [`src/components/WhatsApp.tsx:1`](src/components/WhatsApp.tsx) e [`src/components/Footer.tsx:1`](src/components/Footer.tsx) — trocar pelo número real (DDI+DDD+número, sem símbolos).
+- ~~Número de WhatsApp placeholder~~ — **resolvido**. Número real (+55 99 98449-1810) centralizado em [`src/lib/contact.ts`](src/lib/contact.ts); o botão flutuante e o rodapé importam de lá. Para trocar no futuro, mexer só nesse arquivo.
 - **Links sociais do rodapé** (Instagram, Pinterest, Newsletter) ainda apontam para `#` — faltam as URLs reais.
 - **Formulário "Sob Medida"** (`src/components/MadeToMeasure.tsx`) só atualiza estado local ao enviar — não manda e-mail nem WhatsApp de verdade ainda.
 - **Favicon/OG image**: só existe o `icon.svg` gerado automaticamente pelo Next; não há imagem de Open Graph customizada para compartilhamento em redes sociais.
