@@ -22,15 +22,14 @@ export function CartButton() {
           exit={{ opacity: 0, scale: 0.8 }}
           transition={{ duration: 0.35, ease: EASE }}
           aria-label={`Abrir sacola — ${count} ${count === 1 ? "item" : "itens"}`}
-          /* bottom-28 empilha a sacola acima do botão do WhatsApp (bottom-8, 56px de altura) */
-          className="group fixed bottom-28 right-8 z-50 flex h-14 items-center gap-3 rounded-full bg-ink px-5 text-bone-dark shadow-lg transition-transform duration-300 hover:scale-105 active:scale-95"
+          className="group fixed bottom-8 right-8 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-ink text-bone-dark shadow-lg transition-transform duration-300 hover:scale-110 active:scale-95"
         >
           <svg
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
             strokeWidth="1.5"
-            className="h-5 w-5"
+            className="h-6 w-6"
             aria-hidden="true"
           >
             <path
@@ -39,7 +38,10 @@ export function CartButton() {
               d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4H6ZM3 6h18M16 10a4 4 0 0 1-8 0"
             />
           </svg>
-          <span className="tag tnum">{count}</span>
+          {/* badge de contagem */}
+          <span className="tnum absolute -right-1 -top-1 flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-oxblood px-1 font-sans text-[10px] font-medium text-bone-dark">
+            {count}
+          </span>
         </motion.button>
       )}
     </AnimatePresence>
