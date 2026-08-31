@@ -2,15 +2,18 @@
 
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
+import { parsePriceCents, useCart } from "@/lib/cart";
 import {
   COLORS,
   GROUPS,
+  SIZES,
   models,
   colorOf,
   groupOf,
   type ColorId,
   type GroupId,
   type Model,
+  type SizeId,
 } from "@/lib/vitrine";
 
 type GroupFilter = GroupId | "todas";
@@ -18,24 +21,35 @@ type GroupFilter = GroupId | "todas";
 export default function Vitrine() {
   const [group, setGroup] = useState<GroupFilter>("todas");
   const [colors, setColors] = useState<ColorId[]>([]);
+  const [sizes, setSizes] = useState<SizeId[]>([]);
 
   const byGroup = useMemo(
     () => (group === "todas" ? models : models.filter((m) => m.group === group)),
     [group]
   );
 
+  // Filtros combinam por E: a peça precisa atender cor E tamanho.
   const matches = (m: Model) =>
-    colors.length === 0 || m.variants.some((v) => colors.includes(v.color));
+    (colors.length === 0 || m.variants.some((v) => colors.includes(v.color))) &&
+    (sizes.length === 0 || m.sizes.some((s) => sizes.includes(s)));
 
-  const shown = useMemo(() => byGroup.filter(matches), [byGroup, colors]);
+  const shown = useMemo(() => byGroup.filter(matches), [byGroup, colors, sizes]);
 
   const available = useMemo(
     () => new Set(byGroup.flatMap((m) => m.variants.map((v) => v.color))),
     [byGroup]
   );
 
+  const availableSizes = useMemo(
+    () => new Set(byGroup.flatMap((m) => m.sizes)),
+    [byGroup]
+  );
+
   const toggleColor = (id: ColorId) =>
     setColors((c) => (c.includes(id) ? c.filter((x) => x !== id) : [...c, id]));
+
+  const toggleSize = (id: SizeId) =>
+    setSizes((s) => (s.includes(id) ? s.filter((x) => x !== id) : [...s, id]));
 
   const countFor = (g: GroupFilter) =>
     g === "todas" ? models.length : models.filter((m) => m.group === g).length;
@@ -43,6 +57,7 @@ export default function Vitrine() {
   const clearAll = () => {
     setGroup("todas");
     setColors([]);
+    setSizes([]);
   };
 
   return (
@@ -61,7 +76,7 @@ export default function Vitrine() {
             Vitrine
           </h1>
           <p className="tag max-w-sm text-right text-ink-faint">
-            Escolha a cor direto no card. Agende uma prova para medidas personalizadas.
+            Escolha a cor e o tamanho direto no card e adicione à sacola.
           </p>
         </div>
       </header>
@@ -92,6 +107,39 @@ export default function Vitrine() {
                 </button>
               );
             })}
+          </div>
+
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-2">
+            <span className="tag mr-1 text-ink-faint">Tamanho</span>
+            {SIZES.map((s) => {
+              const active = sizes.includes(s);
+              const has = availableSizes.has(s);
+              return (
+                <button
+                  key={s}
+                  type="button"
+                  onClick={() => toggleSize(s)}
+                  disabled={!has}
+                  aria-pressed={active}
+                  className={`tag h-8 min-w-[2.25rem] touch-manipulation border px-2 tnum transition-colors sm:h-7 ${
+                    active
+                      ? "border-oxblood bg-oxblood text-bone-dark"
+                      : "border-ink/25 text-ink-soft hover:border-ink/60"
+                  } ${has ? "" : "cursor-not-allowed opacity-20"}`}
+                >
+                  {s}
+                </button>
+              );
+            })}
+            {sizes.length > 0 && (
+              <button
+                type="button"
+                onClick={() => setSizes([])}
+                className="tag ml-1 text-oxblood link-underline"
+              >
+                Limpar
+              </button>
+            )}
           </div>
 
           <div className="flex flex-wrap items-center gap-x-2.5 gap-y-2">
@@ -171,6 +219,11 @@ function ModelCard({
 
   const [ref, setRef] = useState(preferred.ref);
   const variant = model.variants.find((v) => v.ref === ref) ?? preferred;
+
+  // Sem tamanho pré-selecionado: em roupa, escolher errado por descuido
+  // custa uma troca. O botão fica travado até a escolha.
+  const [size, setSize] = useState<SizeId | null>(null);
+  const { add } = useCart();
 
   useEffect(() => {
     setRef(preferred.ref);
@@ -253,12 +306,48 @@ function ModelCard({
         </div>
       </dl>
 
-      <a
-        href="/#medida"
-        className="tag mt-4 inline-flex items-center gap-3 border border-ink/25 px-4 py-2.5 text-ink-soft transition-colors hover:border-ink hover:bg-ink hover:text-bone-dark"
+      <div className="mt-4 flex flex-wrap items-center gap-1.5">
+        <span className="tag mr-1 text-ink-faint">Tam.</span>
+        {model.sizes.map((s) => (
+          <button
+            key={s}
+            type="button"
+            onClick={() => setSize(s)}
+            aria-pressed={size === s}
+            className={`tag h-8 min-w-[2.25rem] touch-manipulation border px-2 tnum transition-colors ${
+              size === s
+                ? "border-ink bg-ink text-bone-dark"
+                : "border-ink/25 text-ink-soft hover:border-ink/60"
+            }`}
+          >
+            {s}
+          </button>
+        ))}
+      </div>
+
+      <button
+        type="button"
+        disabled={!size}
+        onClick={() => {
+          if (!size) return;
+          add({
+            ref: variant.ref,
+            name: model.name,
+            color: variant.color,
+            size,
+            priceCents: parsePriceCents(variant.price),
+            image: variant.image,
+          });
+        }}
+        className={`tag mt-3 flex w-full touch-manipulation items-center justify-between border px-4 py-3 transition-colors ${
+          size
+            ? "border-ink/25 text-ink-soft hover:border-ink hover:bg-ink hover:text-bone-dark"
+            : "cursor-not-allowed border-ink/15 text-ink-faint"
+        }`}
       >
-        Comprar agora →
-      </a>
+        <span>{size ? "Adicionar à sacola" : "Escolha o tamanho"}</span>
+        <span aria-hidden>→</span>
+      </button>
     </article>
   );
 }

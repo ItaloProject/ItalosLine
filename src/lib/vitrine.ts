@@ -3,6 +3,10 @@
 
 export type GroupId = "camisas" | "bermudas" | "kits";
 export type ColorId = "off-white" | "areia" | "preto";
+export type SizeId = "P" | "M" | "G" | "GG" | "XG";
+
+/** Ordem de exibição — do menor para o maior, não alfabética. */
+export const SIZES: SizeId[] = ["P", "M", "G", "GG", "XG"];
 
 export type Variant = {
   ref: string;
@@ -19,6 +23,8 @@ export type Model = {
   id: string;
   name: string;
   group: GroupId;
+  /** Grade disponível do modelo. Vale para todas as cores dele. */
+  sizes: SizeId[];
   variants: Variant[];
 };
 
@@ -39,6 +45,7 @@ export const models: Model[] = [
     id: "camisa-oxford",
     name: "Camisa Oxford",
     group: "camisas",
+    sizes: ["P", "M", "G", "GG", "XG"],
     variants: [
       {
         ref: "IL—108",
@@ -73,6 +80,7 @@ export const models: Model[] = [
     id: "camisa-polo-malha",
     name: "Polo Milanese",
     group: "camisas",
+    sizes: ["P", "M", "G", "GG", "XG"],
     variants: [
       {
         ref: "IL—120",
@@ -107,6 +115,7 @@ export const models: Model[] = [
     id: "camisa-linho",
     name: "Camisa Linho Riviera",
     group: "camisas",
+    sizes: ["P", "M", "G", "GG"],
     variants: [
       {
         ref: "IL—141",
@@ -142,6 +151,7 @@ export const models: Model[] = [
     id: "bermuda-moletom",
     name: "Bermuda Moletom",
     group: "bermudas",
+    sizes: ["P", "M", "G", "GG", "XG"],
     variants: [
       {
         ref: "IL—201",
@@ -176,6 +186,7 @@ export const models: Model[] = [
     id: "bermuda-cargo",
     name: "Bermuda Cargo",
     group: "bermudas",
+    sizes: ["M", "G", "GG", "XG"],
     variants: [
       {
         ref: "IL—210",
@@ -210,6 +221,7 @@ export const models: Model[] = [
     id: "bermuda-sarja",
     name: "Bermuda Sarja",
     group: "bermudas",
+    sizes: ["P", "M", "G", "GG", "XG"],
     variants: [
       {
         ref: "IL—220",
@@ -245,6 +257,7 @@ export const models: Model[] = [
     id: "kit-polo",
     name: "Kit Polo",
     group: "kits",
+    sizes: ["M", "G", "GG"],
     variants: [
       {
         ref: "IL—301",
@@ -279,6 +292,7 @@ export const models: Model[] = [
     id: "kit-casual",
     name: "Kit Casual",
     group: "kits",
+    sizes: ["P", "M", "G", "GG"],
     variants: [
       {
         ref: "IL—310",
@@ -313,6 +327,7 @@ export const models: Model[] = [
     id: "kit-formal",
     name: "Kit Formal",
     group: "kits",
+    sizes: ["M", "G", "GG", "XG"],
     variants: [
       {
         ref: "IL—321",

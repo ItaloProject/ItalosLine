@@ -2,6 +2,8 @@ import type { Metadata, Viewport } from "next";
 import { Fraunces, Spline_Sans_Mono, Archivo } from "next/font/google";
 import "./globals.css";
 import WhatsApp from "@/components/WhatsApp";
+import Cart, { CartButton } from "@/components/Cart";
+import { CartProvider } from "@/lib/cart";
 
 const serif = Fraunces({
   subsets: ["latin"],
@@ -55,8 +57,12 @@ export default function RootLayout({
       className={`${serif.variable} ${mono.variable} ${sans.variable}`}
     >
       <body className="paper relative">
-        {children}
-        <WhatsApp />
+        <CartProvider>
+          {children}
+          <WhatsApp />
+          <CartButton />
+          <Cart />
+        </CartProvider>
       </body>
     </html>
   );
