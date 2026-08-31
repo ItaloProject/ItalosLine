@@ -206,30 +206,47 @@ export default function Vitrine() {
           resto num painel. Antes os três blocos empilhavam e empurravam a
           primeira peça para fora da tela. */}
       <div className="sticky top-[57px] z-30 mt-10 border-y border-ink/15 bg-bone/95 backdrop-blur-md lg:hidden">
-        <div className="flex gap-2 overflow-x-auto px-6 py-3 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          {groupOptions.map((g) => {
-            const active = group === g;
-            return (
-              <button
-                key={g}
-                type="button"
-                onClick={() => setGroup(g)}
-                aria-pressed={active}
-                className={`tag flex shrink-0 touch-manipulation items-baseline gap-1.5 border px-3.5 py-2.5 transition-colors ${
-                  active
-                    ? "border-oxblood bg-oxblood text-bone-dark"
-                    : "border-ink/20 text-ink-soft"
-                }`}
-              >
-                {g === "todas" ? "Todas" : groupOf(g).label}
-                <span
-                  className={`tnum ${active ? "text-bone-dark/70" : "text-ink-faint"}`}
+        <div className="relative">
+          <div className="flex gap-2 overflow-x-auto px-6 py-3 pr-12 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            {groupOptions.map((g) => {
+              const active = group === g;
+              return (
+                <button
+                  key={g}
+                  type="button"
+                  onClick={() => setGroup(g)}
+                  aria-pressed={active}
+                  className={`tag flex shrink-0 touch-manipulation items-baseline gap-1.5 border px-3.5 py-2.5 transition-colors ${
+                    active
+                      ? "border-oxblood bg-oxblood text-bone-dark"
+                      : "border-ink/20 text-ink-soft"
+                  }`}
                 >
-                  {String(countFor(g)).padStart(2, "0")}
-                </span>
-              </button>
-            );
-          })}
+                  {g === "todas" ? "Todas" : groupOf(g).label}
+                  <span
+                    className={`tnum ${active ? "text-bone-dark/70" : "text-ink-faint"}`}
+                  >
+                    {String(countFor(g)).padStart(2, "0")}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+          {/* Indicador de scroll: gradiente + seta mostram que há mais chips à direita */}
+          <div className="pointer-events-none absolute inset-y-0 right-0 flex w-14 items-center justify-end bg-gradient-to-l from-bone/95 via-bone/80 to-transparent pr-3">
+            <svg
+              viewBox="0 0 16 16"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="h-4 w-4 text-ink-faint"
+              aria-hidden
+            >
+              <path d="M6 3l5 5-5 5" />
+            </svg>
+          </div>
         </div>
 
         <div className="flex items-center justify-between gap-4 border-t border-ink/10 px-6 py-2.5">
