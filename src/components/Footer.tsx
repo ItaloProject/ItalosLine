@@ -15,7 +15,7 @@ const cols: Col[] = [
   {
     title: "Atendimento",
     links: [
-      { label: "Agendar prova",   href: "/#medida" },
+      { label: "Comprar agora",   href: "/#medida" },
       { label: "Guia de medidas", href: "#" },
       { label: "Cuidados",        href: "#" },
       { label: "Trocas",          href: "#" },
@@ -50,7 +50,7 @@ export default function Footer() {
               Casa de alfaiataria contemporânea. Peças numeradas, feitas à mão,
               construídas para atravessar o tempo.
             </p>
-            <p className="mt-6 tag text-oxblood">São Paulo · Brasil</p>
+            <p className="mt-6 tag text-oxblood">Bacabal · Brasil</p>
           </div>
 
           {cols.map((c) => (

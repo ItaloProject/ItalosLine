@@ -50,7 +50,7 @@ export default function Nav() {
               href="/#medida"
               className="hidden tag text-oxblood link-underline md:inline"
             >
-              Agendar prova →
+              Comprar agora →
             </a>
             <button
               onClick={() => setOpen(true)}

@@ -209,7 +209,7 @@ export default function Hero() {
 
             <div className="overflow-hidden mb-6">
               <p ref={tagRef} className="tag text-oxblood">
-                São Paulo · Feito à mão, peça por peça
+                Bacabal · Feito à mão, peça por peça
               </p>
             </div>
 
@@ -296,7 +296,7 @@ export default function Hero() {
 
         <div ref={bottomBarRef} className="flex items-center justify-between border-t border-ink/15 pt-4">
           <span className="tag text-ink-faint">↓ Role para explorar</span>
-          <span className="tag tnum text-ink-faint">23°33′S 46°38′O</span>
+          <span className="tag tnum text-ink-faint">4°13′S 44°47′O</span>
         </div>
       </div>
     </section>

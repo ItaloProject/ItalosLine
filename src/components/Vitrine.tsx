@@ -257,7 +257,7 @@ function ModelCard({
         href="/#medida"
         className="tag mt-4 inline-flex items-center gap-3 border border-ink/25 px-4 py-2.5 text-ink-soft transition-colors hover:border-ink hover:bg-ink hover:text-bone-dark"
       >
-        Agendar prova →
+        Comprar agora →
       </a>
     </article>
   );

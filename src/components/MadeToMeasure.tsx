@@ -11,8 +11,11 @@ const pieces = [
   "Guarda-roupa completo",
 ];
 
+const sizes = ["P", "M", "G", "GG", "XG"];
+
 export default function MadeToMeasure() {
   const [piece, setPiece] = useState(pieces[0]);
+  const [size, setSize] = useState(sizes[1]);
   const [sent, setSent] = useState(false);
   const [fichaNum, setFichaNum] = useState("—");
 
@@ -94,11 +97,32 @@ export default function MadeToMeasure() {
                       </div>
                     </div>
 
+                    <div>
+                      <label className="tag text-ink/65">Tamanho</label>
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        {sizes.map((s) => (
+                          <button
+                            key={s}
+                            type="button"
+                            onClick={() => setSize(s)}
+                            aria-pressed={size === s}
+                            className={`min-w-[3rem] touch-manipulation border px-3 py-2 font-mono text-xs tnum transition-colors ${
+                              size === s
+                                ? "border-oxbright bg-oxbright text-ink"
+                                : "border-ink/20 text-ink/60 hover:border-ink/50"
+                            }`}
+                          >
+                            {s}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
                     <button
                       type="submit"
                       className="group flex w-full items-center justify-between border border-ink/40 px-6 py-4 text-ink transition-colors hover:border-oxbright hover:bg-oxblood"
                     >
-                      <span className="tag">Solicitar prova</span>
+                      <span className="tag">Verificar pedido</span>
                       <span className="transition-transform group-hover:translate-x-1">
                         →
                       </span>
@@ -110,9 +134,10 @@ export default function MadeToMeasure() {
                       Recebido ✓
                     </span>
                     <p className="font-sans text-sm font-light text-ink/60">
-                      Sua ficha para <em className="text-ink">{piece}</em> foi
-                      registrada. Entraremos em contato para agendar sua prova no
-                      ateliê.
+                      Seu pedido de <em className="text-ink">{piece}</em> no
+                      tamanho <em className="text-ink tnum">{size}</em> foi
+                      registrado. Entraremos em contato para confirmar os
+                      detalhes.
                     </p>
                   </div>
                 )}
