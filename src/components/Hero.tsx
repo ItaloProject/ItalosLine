@@ -55,7 +55,10 @@ export default function Hero() {
     const ctx = gsap.context(() => {
       if (reduced || alreadyPlayed) {
         flyerVideo.pause();
-        gsap.set(flyer, { autoAlpha: 0 });
+        // Sem largura/altura explícitas, o vídeo interno (w-full/h-full)
+        // colapsa para seu tamanho intrínseco (1280px) contra um <div>
+        // fixed sem "right", estourando a largura da página inteira.
+        gsap.set(flyer, { autoAlpha: 0, width: 0, height: 0 });
         gsap.set([title1, title2], { yPercent: 0 });
         gsap.set(
           [plate, targetVideo, tagRef.current, copyRef.current,
@@ -168,7 +171,7 @@ export default function Hero() {
       {/* Camisa em trânsito */}
       <div
         ref={flyerRef}
-        className="pointer-events-none fixed left-0 top-0 z-50 will-change-transform"
+        className="pointer-events-none fixed left-0 top-0 z-50 h-0 w-0 will-change-transform"
         style={{ opacity: 0, visibility: "hidden" }}
         aria-hidden
       >
