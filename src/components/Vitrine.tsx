@@ -1,5 +1,6 @@
 "use client";
 
+import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import { parsePriceCents, useCart } from "@/lib/cart";
@@ -22,6 +23,8 @@ export default function Vitrine() {
   const [group, setGroup] = useState<GroupFilter>("todas");
   const [colors, setColors] = useState<ColorId[]>([]);
   const [sizes, setSizes] = useState<SizeId[]>([]);
+  /** Só no mobile: tamanho e cor moram num painel, para a barra caber numa linha. */
+  const [sheetOpen, setSheetOpen] = useState(false);
 
   const byGroup = useMemo(
     () => (group === "todas" ? models : models.filter((m) => m.group === group)),
@@ -60,6 +63,26 @@ export default function Vitrine() {
     setSizes([]);
   };
 
+  const groupOptions = ["todas", ...GROUPS.map((g) => g.id)] as GroupFilter[];
+
+  /** Refinamentos ativos (tamanho + cor) — vira o contador do botão no mobile. */
+  const refinementCount = sizes.length + colors.length;
+
+  // Trava o fundo e fecha no Esc enquanto o painel de filtros está aberto.
+  useEffect(() => {
+    if (!sheetOpen) return;
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setSheetOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = previous;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [sheetOpen]);
+
   return (
     <section id="vitrine" className="relative lg:pl-14">
       {/* ── Cabeçalho ────────────────────────────────────────────────── */}
@@ -82,7 +105,7 @@ export default function Vitrine() {
       </header>
 
       {/* ── Filtros ──────────────────────────────────────────────────── */}
-      <div className="sticky top-[57px] z-30 mt-10 border-y border-ink/15 bg-bone/85 backdrop-blur-md">
+      <div className="sticky top-[57px] z-30 mt-10 hidden border-y border-ink/15 bg-bone/85 backdrop-blur-md lg:block">
         <div className="mx-auto flex max-w-[1600px] flex-col gap-4 px-6 py-4 md:px-10 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex flex-wrap items-center gap-x-7 gap-y-2">
             <span className="tag text-ink-faint">Grupo</span>
@@ -178,6 +201,170 @@ export default function Vitrine() {
           </div>
         </div>
       </div>
+
+      {/* Filtros · mobile — barra enxuta: grupos numa linha rolável e o
+          resto num painel. Antes os três blocos empilhavam e empurravam a
+          primeira peça para fora da tela. */}
+      <div className="sticky top-[57px] z-30 mt-10 border-y border-ink/15 bg-bone/95 backdrop-blur-md lg:hidden">
+        <div className="flex gap-2 overflow-x-auto px-6 py-3 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          {groupOptions.map((g) => {
+            const active = group === g;
+            return (
+              <button
+                key={g}
+                type="button"
+                onClick={() => setGroup(g)}
+                aria-pressed={active}
+                className={`tag flex shrink-0 touch-manipulation items-baseline gap-1.5 border px-3.5 py-2.5 transition-colors ${
+                  active
+                    ? "border-oxblood bg-oxblood text-bone-dark"
+                    : "border-ink/20 text-ink-soft"
+                }`}
+              >
+                {g === "todas" ? "Todas" : groupOf(g).label}
+                <span
+                  className={`tnum ${active ? "text-bone-dark/70" : "text-ink-faint"}`}
+                >
+                  {String(countFor(g)).padStart(2, "0")}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="flex items-center justify-between gap-4 border-t border-ink/10 px-6 py-2.5">
+          <button
+            type="button"
+            onClick={() => setSheetOpen(true)}
+            className="tag flex touch-manipulation items-center gap-2 border border-ink/25 px-4 py-2.5 text-ink"
+          >
+            Tamanho e cor
+            {refinementCount > 0 && (
+              <span className="tnum flex h-5 min-w-[1.25rem] items-center justify-center bg-oxblood px-1 text-bone-dark">
+                {refinementCount}
+              </span>
+            )}
+          </button>
+          <span className="tag tnum shrink-0 text-ink-faint">
+            {shown.length} {shown.length === 1 ? "peça" : "peças"}
+          </span>
+        </div>
+      </div>
+
+      {/* Painel de tamanho e cor · mobile */}
+      <AnimatePresence>
+        {sheetOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.25 }}
+              onClick={() => setSheetOpen(false)}
+              className="fixed inset-0 z-[80] bg-black/50 lg:hidden"
+              aria-hidden
+            />
+            <motion.div
+              role="dialog"
+              aria-modal="true"
+              aria-label="Filtrar por tamanho e cor"
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              exit={{ y: "100%" }}
+              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              className="fixed inset-x-0 bottom-0 z-[90] flex max-h-[85vh] flex-col bg-bone lg:hidden"
+            >
+              <div className="flex items-center justify-between border-b border-ink/15 px-6 py-4">
+                <span className="font-serif text-xl font-light text-ink">
+                  Filtros
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setSheetOpen(false)}
+                  className="tag -m-3 touch-manipulation p-3 text-ink"
+                >
+                  Fechar ×
+                </button>
+              </div>
+
+              <div className="flex-1 overflow-y-auto px-6 py-6">
+                <p className="tag text-ink-faint">Tamanho</p>
+                <div className="mt-3 flex gap-2">
+                  {SIZES.map((s) => {
+                    const active = sizes.includes(s);
+                    const has = availableSizes.has(s);
+                    return (
+                      <button
+                        key={s}
+                        type="button"
+                        onClick={() => toggleSize(s)}
+                        disabled={!has}
+                        aria-pressed={active}
+                        className={`tag tnum h-12 flex-1 touch-manipulation border transition-colors ${
+                          active
+                            ? "border-oxblood bg-oxblood text-bone-dark"
+                            : "border-ink/25 text-ink-soft"
+                        } ${has ? "" : "cursor-not-allowed opacity-25"}`}
+                      >
+                        {s}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                <p className="tag mt-8 text-ink-faint">Cor</p>
+                <div className="mt-3 flex flex-col gap-2">
+                  {COLORS.map((c) => {
+                    const active = colors.includes(c.id);
+                    const has = available.has(c.id);
+                    return (
+                      <button
+                        key={c.id}
+                        type="button"
+                        onClick={() => toggleColor(c.id)}
+                        disabled={!has}
+                        aria-pressed={active}
+                        className={`flex touch-manipulation items-center gap-3 border px-3 py-3 transition-colors ${
+                          active ? "border-oxblood" : "border-ink/20"
+                        } ${has ? "" : "cursor-not-allowed opacity-30"}`}
+                      >
+                        <span
+                          aria-hidden
+                          className="h-6 w-6 shrink-0 border border-ink/25"
+                          style={{ backgroundColor: c.hex }}
+                        />
+                        <span className="tag text-ink">{c.label}</span>
+                        {active && (
+                          <span className="tag ml-auto text-oxblood">
+                            Selecionada
+                          </span>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3 border-t border-ink/15 px-6 py-4">
+                <button
+                  type="button"
+                  onClick={clearAll}
+                  className="tag flex-1 touch-manipulation border border-ink/25 py-3.5 text-ink-soft"
+                >
+                  Limpar tudo
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSheetOpen(false)}
+                  className="tag flex-1 touch-manipulation bg-ink py-3.5 text-bone-dark"
+                >
+                  Ver {shown.length} {shown.length === 1 ? "peça" : "peças"}
+                </button>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
 
       {/* ── Grade de modelos ─────────────────────────────────────────── */}
       <div className="mx-auto max-w-[1600px] px-6 py-6 md:px-10">
