@@ -196,9 +196,9 @@ export default function Hero() {
           <span className="tag text-ink">Estação Um · MMXXVI</span>
         </div>
 
-        <div className="relative grid flex-1 grid-cols-12 items-center gap-6 py-10">
+        <div className="relative grid flex-1 items-center gap-6 py-10 lg:grid-cols-12">
 
-          <div ref={mastheadRef} className="relative col-span-12 lg:col-span-8">
+          <div ref={mastheadRef} className="relative lg:col-span-8">
             {/* Numeral fantasma — escala e profundidade editorial */}
             <span
               aria-hidden
@@ -257,7 +257,7 @@ export default function Hero() {
           {/* Quadro */}
           <figure
             ref={plateRef}
-            className="col-span-8 col-start-3 mt-4 lg:col-span-4 lg:col-start-9 lg:mt-0"
+            className="mx-auto mt-4 w-full max-w-[17rem] lg:col-span-4 lg:col-start-9 lg:mt-0 lg:max-w-none"
           >
             <div
               ref={frameRef}

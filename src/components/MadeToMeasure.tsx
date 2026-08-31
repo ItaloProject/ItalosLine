@@ -28,9 +28,9 @@ export default function MadeToMeasure() {
   return (
     <section id="medida" className="border-t border-ink/10 bg-surface lg:pl-14">
       <div className="mx-auto max-w-[1600px] px-6 py-24 md:px-10 md:py-32">
-        <div className="grid grid-cols-12 gap-10">
+        <div className="grid gap-10 lg:grid-cols-12">
           {/* lado esquerdo — convite */}
-          <div className="col-span-12 lg:col-span-5">
+          <div className="lg:col-span-5">
             <Reveal>
               <span className="tag text-oxbright">03 — Sob Medida</span>
               <h2 className="mt-6 font-serif text-5xl font-light leading-[0.95] text-ink md:text-6xl">
@@ -52,7 +52,7 @@ export default function MadeToMeasure() {
           </div>
 
           {/* lado direito — ficha de pedido */}
-          <div className="col-span-12 lg:col-span-6 lg:col-start-7">
+          <div className="lg:col-span-6 lg:col-start-7">
             <Reveal delay={0.12}>
               <form
                 onSubmit={submit}

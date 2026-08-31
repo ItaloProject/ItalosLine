@@ -69,9 +69,9 @@ export default function Arquivo() {
           <span className="tag text-ink-faint">Índice da estação</span>
         </div>
 
-        <div className="grid grid-cols-12 gap-10 pt-10">
+        <div className="grid gap-10 pt-10 lg:grid-cols-12">
           {/* índice */}
-          <div className="col-span-12 lg:col-span-7">
+          <div className="lg:col-span-7">
             <ul>
               {index.map((item, i) => (
                 <Reveal key={item.n} delay={i * 0.06}>
@@ -114,7 +114,7 @@ export default function Arquivo() {
           </div>
 
           {/* painel de imagem */}
-          <div className="col-span-5 col-start-8 hidden lg:block">
+          <div className="hidden lg:col-span-5 lg:col-start-8 lg:block">
             <div className="sticky top-28">
                 <div className="relative aspect-[3/4] w-full overflow-hidden border border-ink/20">
                 <AnimatePresence mode="sync">
