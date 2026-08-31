@@ -41,14 +41,16 @@ npm run dev
 
 ## Histórico recente (mais novo primeiro)
 
-1. **`a231bb4`** — fix: botão do WhatsApp estava a 24px da borda (`right-6`), e o anel de pulso (`animate-ping`) escala 2x durante a animação — ultrapassava a viewport continuamente, causando overflow horizontal (faixa preta ao rolar no mobile). Corrigido afastando para `right-8/bottom-8`.
-2. **`57de0c5`** — fix: reverte `overflow-x:hidden` do `<html>` (estava quebrando o `position:sticky` da Passarela — as camisas pararam de deslizar lateralmente ao rolar)
-3. **`a50721e`** — feat: passada geral de UX mobile (viewport/theme-color, tap-highlight removido, alvos de toque maiores na Vitrine, `touch-manipulation`, qualidade de imagem 100→85)
-4. **`89b1409`** — fix: overflow horizontal causado pela "camisa em trânsito" do Hero sem `width`/`height` no caminho que pula a animação de intro
-5. **`e9a0cf7`** — fix: responsividade mobile (CTA do Hero quebra linha, wordmark do rodapé não estoura mais, descrições do Arquivo/Passarela visíveis em touch — antes só apareciam com `:hover`)
-6. **`671cc58`** — perf: vídeos do Hero recomprimidos (17MB→4.2MB, corrigido `faststart`) + animação de entrada só roda 1x por sessão (`sessionStorage`)
-7. **`8572099`** — fix: trava scroll durante a animação de entrada da camisa
-8. **`0ffec62`** — commit inicial do projeto completo
+1. **`5be082c`** — fix: **causa raiz** do scroll lateral / conteúdo cortado no mobile. `grid-cols-12 gap-10` no Arquivo e no MadeToMeasure estourava 74px em telas de 414px (só os gaps somam 440px). Agora coluna única no mobile, 12 colunas só a partir de `lg:`. Hero também passou a empilhar.
+2. **`a0b0108`** — fix: `position:relative` no `<html>` para silenciar o aviso de scroll offset do Framer Motion
+3. **`a231bb4`** — fix: botão do WhatsApp estava a 24px da borda (`right-6`), e o anel de pulso (`animate-ping`) escala 2x durante a animação — ultrapassava a viewport continuamente, causando overflow horizontal (faixa preta ao rolar no mobile). Corrigido afastando para `right-8/bottom-8`.
+4. **`57de0c5`** — fix: reverte `overflow-x:hidden` do `<html>` (estava quebrando o `position:sticky` da Passarela — as camisas pararam de deslizar lateralmente ao rolar)
+5. **`a50721e`** — feat: passada geral de UX mobile (viewport/theme-color, tap-highlight removido, alvos de toque maiores na Vitrine, `touch-manipulation`, qualidade de imagem 100→85)
+6. **`89b1409`** — fix: overflow horizontal causado pela "camisa em trânsito" do Hero sem `width`/`height` no caminho que pula a animação de intro
+7. **`e9a0cf7`** — fix: responsividade mobile (CTA do Hero quebra linha, wordmark do rodapé não estoura mais, descrições do Arquivo/Passarela visíveis em touch — antes só apareciam com `:hover`)
+8. **`671cc58`** — perf: vídeos do Hero recomprimidos (17MB→4.2MB, corrigido `faststart`) + animação de entrada só roda 1x por sessão (`sessionStorage`)
+9. **`8572099`** — fix: trava scroll durante a animação de entrada da camisa
+10. **`0ffec62`** — commit inicial do projeto completo
 
 ## Decisões / armadilhas já resolvidas (não repetir)
 
@@ -56,6 +58,8 @@ npm run dev
 - **Todo `<div>` com `position:fixed` precisa de `width`/`height` explícitos** (ou `inset`/`left+right`) — se depender de um filho com `w-full`/`h-full` sem isso, o navegador usa o tamanho intrínseco do conteúdo (ex: 1280px de um vídeo), estourando a largura da página inteira. Foi o caso do Hero (`flyerRef`).
 - **MP4s precisam de `-movflags +faststart`** (moov atom no início do arquivo) — sem isso o navegador baixa o vídeo inteiro antes de conseguir tocar qualquer frame.
 - **Conteúdo que só aparece em `:hover` fica invisível no mobile** (sem mouse, sem hover). Onde isso importava (descrição do Arquivo, ficha técnica da Passarela), foi trocado para: visível por padrão, e só vira efeito hover a partir de `lg:` (telas grandes/desktop).
+- **`grid-cols-12` + `gap` grande no mobile estoura a tela.** Foi a causa raiz do scroll lateral / conteúdo cortado que apareceu em várias seções. Num grid de 12 colunas, os espaçamentos somam `11 × gap` e são **fixos** — as colunas (`minmax(0,1fr)`) encolhem até zero, mas os gaps não. Com `gap-10` (40px): 440px só de gaps, contra ~366px de container num iPhone XR. Regra: grids de 12 colunas só a partir de `lg:`; no mobile, coluna única. E escopar `col-span-*`/`col-start-*` em `lg:` também — num grid de coluna única, `col-span-12` cria 11 colunas implícitas e reintroduz o estouro.
+- **Overflow em qualquer seção deixa a página inteira rolável na horizontal**, porque a largura do documento é global. Se o topo do site "anda pro lado", o culpado pode estar numa seção lá embaixo.
 - **Elemento `fixed` perto da borda + animação `scale()` = overflow horizontal.** O botão de WhatsApp (`fixed right-6`) tinha um anel `animate-ping` que escala 2x em loop — isso ultrapassava a borda direita da viewport continuamente. Qualquer elemento fixo próximo da borda que anima `scale`/`transform` precisa de folga suficiente para o estado expandido não vazar da tela.
 - O usuário **pediu para não usar o browser preview** para verificar mudanças — todo trabalho de responsividade foi feito por auditoria de código, e a verificação visual é feita pelo próprio usuário, que manda screenshots.
 
