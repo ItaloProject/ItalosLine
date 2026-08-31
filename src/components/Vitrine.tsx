@@ -231,7 +231,10 @@ function ModelCard({
   }, [preferred.ref]);
 
   return (
-    <article className="group">
+    /* id = alvo do link enviado no pedido (/vitrine#id). O scroll-mt
+       compensa o cabeçalho fixo + a barra de filtros grudada no topo,
+       senão a peça abre escondida atrás deles. */
+    <article id={model.id} className="group scroll-mt-40">
       <figure className="relative aspect-[3/4] w-full overflow-hidden border border-ink/20 bg-surface">
         {variant.image ? (
           <Image
@@ -337,6 +340,7 @@ function ModelCard({
             size,
             priceCents: parsePriceCents(variant.price),
             image: variant.image,
+            modelId: model.id,
           });
         }}
         className={`tag mt-3 flex w-full touch-manipulation items-center justify-between border px-4 py-3 transition-colors ${

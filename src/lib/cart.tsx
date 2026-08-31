@@ -8,7 +8,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { WHATSAPP_PHONE } from "./contact";
+import { SITE_URL, WHATSAPP_PHONE } from "./contact";
 import { colorOf, type ColorId, type SizeId } from "./vitrine";
 
 export type CartItem = {
@@ -22,6 +22,12 @@ export type CartItem = {
   priceCents: number;
   image?: string;
   qty: number;
+  /**
+   * Ancora o item na Vitrine (/vitrine#id). Opcional porque sacolas
+   * gravadas antes deste campo existirem seguem válidas — nesse caso o
+   * pedido sai sem o link, em vez de quebrar.
+   */
+  modelId?: string;
 };
 
 type CartContextValue = {
@@ -58,6 +64,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
   const [open, setOpen] = useState(false);
   const [hydrated, setHydrated] = useState(false);
+
+  // Links do pedido precisam ser absolutos para o WhatsApp torná-los
+  // clicáveis. Começa no endereço público (também usado no render do
+  // servidor) e passa a refletir a origem real depois de montar.
+  const [origin, setOrigin] = useState(SITE_URL);
+
+  useEffect(() => setOrigin(window.location.origin), []);
 
   // Restaura a sacola. Só depois disso passamos a gravar, senão o
   // primeiro render (lista vazia) apagaria o que estava salvo.
@@ -136,19 +149,20 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   // Sem gateway de pagamento: o pedido é fechado pelo WhatsApp.
   const checkoutUrl = useMemo(() => {
-    const linhas = items.map(
-      (i) =>
-        `• ${i.qty}x ${i.name} — ${colorOf(i.color).label}, tam. ${i.size} (${i.ref}) — ${formatBRL(i.priceCents * i.qty)}`
-    );
+    // Um bloco por item: a descrição e, abaixo, o link da peça na Vitrine.
+    const blocos = items.map((i) => {
+      const linha = `• ${i.qty}x ${i.name} — ${colorOf(i.color).label}, tam. ${i.size} (${i.ref}) — ${formatBRL(i.priceCents * i.qty)}`;
+      return i.modelId ? `${linha}\n${origin}/vitrine#${i.modelId}` : linha;
+    });
     const texto = [
       "Olá! Gostaria de fechar este pedido pelo site da ItalosLine:",
       "",
-      ...linhas,
+      blocos.join("\n\n"),
       "",
       `Total: ${formatBRL(totalCents)}`,
     ].join("\n");
     return `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(texto)}`;
-  }, [items, totalCents]);
+  }, [items, totalCents, origin]);
 
   const value: CartContextValue = {
     items,
