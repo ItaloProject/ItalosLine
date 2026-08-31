@@ -57,7 +57,7 @@ export default function Nav() {
               className="tag -m-3 touch-manipulation p-3 text-ink md:hidden"
               aria-label="Abrir menu"
             >
-              Índice +
+              Menu +
             </button>
           </div>
         </nav>
