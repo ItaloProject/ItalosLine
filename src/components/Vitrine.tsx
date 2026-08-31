@@ -3,6 +3,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { parsePriceCents, useCart } from "@/lib/cart";
 import {
   COLORS,
@@ -20,7 +21,13 @@ import {
 type GroupFilter = GroupId | "todas";
 
 export default function Vitrine() {
-  const [group, setGroup] = useState<GroupFilter>("todas");
+  const searchParams = useSearchParams();
+  const initialGroup = (): GroupFilter => {
+    const g = searchParams.get("grupo");
+    if (g === "camisas" || g === "bermudas" || g === "kits") return g;
+    return "todas";
+  };
+  const [group, setGroup] = useState<GroupFilter>(initialGroup);
   const [colors, setColors] = useState<ColorId[]>([]);
   const [sizes, setSizes] = useState<SizeId[]>([]);
   /** Só no mobile: tamanho e cor moram num painel, para a barra caber numa linha. */

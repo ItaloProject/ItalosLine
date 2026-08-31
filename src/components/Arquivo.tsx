@@ -80,7 +80,7 @@ export default function Arquivo() {
                     className="group border-b border-ink/15"
                   >
                     <a
-                      href="#medida"
+                      href={`/vitrine?grupo=${item.grupo}`}
                       className="flex items-center gap-5 py-7 transition-[padding] duration-500 ease-editorial group-hover:pl-4"
                     >
                       <span className="tag text-ink-faint tnum">{item.n}</span>

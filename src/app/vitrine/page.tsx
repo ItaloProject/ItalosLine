@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import Ruler from "@/components/Ruler";
 import Nav from "@/components/Nav";
 import Vitrine from "@/components/Vitrine";
@@ -20,7 +21,9 @@ export default function VitrinePage() {
     <main className="theme-light relative min-h-screen">
       <Ruler />
       <Nav />
-      <Vitrine />
+      <Suspense>
+        <Vitrine />
+      </Suspense>
       <Footer />
     </main>
   );

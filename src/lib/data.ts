@@ -75,17 +75,20 @@ export const index = [
     title: "Camisas",
     note: "Do oxford ao linho, cada camisa cortada para o corpo real.",
     image: "/products/camisa-oxford-branca.png",
+    grupo: "camisas",
   },
   {
     n: "02",
     title: "Bermudas",
     note: "Tecidos leves para os dias mais quentes, sem perder a estrutura.",
     image: "/products/bermuda-sarja-branca.png",
+    grupo: "bermudas",
   },
   {
     n: "03",
     title: "Mais estilo",
     note: "Combinações que valorizam o guarda-roupa inteiro, peça por peça.",
     image: "/products/kit-polo-branca.png",
+    grupo: "kits",
   },
 ];
