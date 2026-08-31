@@ -101,7 +101,7 @@ export default function Runway() {
                     />
                   )}
                   {/* etiqueta de ficha técnica */}
-                  <figcaption className="absolute inset-x-3 bottom-3 flex translate-y-2 items-stretch gap-px bg-bone-dark/90 text-ink opacity-0 backdrop-blur-sm transition-all duration-500 ease-editorial group-hover:translate-y-0 group-hover:opacity-100">
+                  <figcaption className="absolute inset-x-3 bottom-3 flex items-stretch gap-px bg-bone-dark/90 text-ink backdrop-blur-sm transition-all duration-500 ease-editorial lg:translate-y-2 lg:opacity-0 lg:group-hover:translate-y-0 lg:group-hover:opacity-100">
                     <Spec k="Tecido" v={g.fabric} />
                     <Spec k="Gramatura" v={g.weight} />
                     <Spec k="Origem" v={g.origin} />

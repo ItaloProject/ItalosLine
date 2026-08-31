@@ -239,10 +239,10 @@ export default function Hero() {
               estações. Sem pressa. Sem excesso.
             </p>
 
-            <div ref={ctaRef} className="mt-9 flex items-center gap-8">
+            <div ref={ctaRef} className="mt-9 flex flex-wrap items-center gap-x-6 gap-y-4 sm:gap-x-8">
               <a
                 href="#passarela"
-                className="group inline-flex items-center gap-3 bg-ink px-8 py-4 text-bone-dark transition-colors hover:bg-oxblood hover:text-ink"
+                className="group inline-flex items-center gap-3 bg-ink px-6 py-4 text-bone-dark transition-colors hover:bg-oxblood hover:text-ink sm:px-8"
               >
                 <span className="tag">Ver a passarela</span>
                 <span className="transition-transform group-hover:translate-x-1">→</span>

@@ -104,7 +104,7 @@ export default function Arquivo() {
                         →
                       </span>
                     </a>
-                    <p className="max-w-lg -translate-y-2 pb-6 font-sans text-sm font-light text-ink-soft opacity-0 transition-all duration-500 ease-editorial group-hover:translate-y-0 group-hover:opacity-100">
+                    <p className="max-w-lg pb-6 font-sans text-sm font-light text-ink-soft transition-all duration-500 ease-editorial lg:-translate-y-2 lg:opacity-0 lg:group-hover:translate-y-0 lg:group-hover:opacity-100">
                       {item.note}
                     </p>
                   </li>

@@ -39,7 +39,7 @@ export default function Footer() {
       <div className="mx-auto max-w-[1600px] px-6 md:px-10">
         {/* wordmark gigante */}
         <div className="border-b border-ink/15 py-14">
-          <p className="font-serif text-[18vw] font-light leading-none text-ink md:text-[13vw]">
+          <p className="break-words font-serif text-[13vw] font-light leading-none text-ink">
             Italos<span className="italic text-outline">Line</span>
           </p>
         </div>
