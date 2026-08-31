@@ -48,6 +48,12 @@
 }
 
 html {
+  /* position:relative — o Framer Motion usa <html> como container de
+     referência do useScroll e mede o offset do alvo subindo a cadeia de
+     offsetParent. Com o container em position:static ele avisa que o
+     offset pode sair errado. NÃO trocar por overflow-x:hidden aqui:
+     isso quebra o position:sticky da Passarela. */
+  position: relative;
   scroll-behavior: smooth;
   width: 100%;
   -webkit-tap-highlight-color: transparent;
