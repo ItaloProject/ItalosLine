@@ -2,7 +2,7 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { parsePriceCents, useCart } from "@/lib/cart";
 import {
   COLORS,
@@ -67,6 +67,8 @@ export default function Vitrine() {
 
   /** Refinamentos ativos (tamanho + cor) — vira o contador do botão no mobile. */
   const refinementCount = sizes.length + colors.length;
+
+  const chipsRef = useRef<HTMLDivElement>(null);
 
   // Trava o fundo e fecha no Esc enquanto o painel de filtros está aberto.
   useEffect(() => {
@@ -207,7 +209,7 @@ export default function Vitrine() {
           primeira peça para fora da tela. */}
       <div className="sticky top-[57px] z-30 mt-10 border-y border-ink/15 bg-bone/95 backdrop-blur-md lg:hidden">
         <div className="relative">
-          <div className="flex gap-2 overflow-x-auto px-6 py-3 pr-12 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <div ref={chipsRef} className="flex gap-2 overflow-x-auto px-6 py-3 pr-12 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {groupOptions.map((g) => {
               const active = group === g;
               return (
@@ -232,8 +234,15 @@ export default function Vitrine() {
               );
             })}
           </div>
-          {/* Indicador de scroll: gradiente + seta mostram que há mais chips à direita */}
-          <div className="pointer-events-none absolute inset-y-0 right-0 flex w-14 items-center justify-end bg-gradient-to-l from-bone/95 via-bone/80 to-transparent pr-3">
+          {/* Botão de scroll: toca para revelar chips escondidos à direita */}
+          <button
+            type="button"
+            aria-label="Ver mais filtros"
+            onClick={() =>
+              chipsRef.current?.scrollBy({ left: 140, behavior: "smooth" })
+            }
+            className="absolute inset-y-0 right-0 flex w-14 touch-manipulation items-center justify-end bg-gradient-to-l from-bone/95 via-bone/80 to-transparent pr-3"
+          >
             <svg
               viewBox="0 0 16 16"
               fill="none"
@@ -246,7 +255,7 @@ export default function Vitrine() {
             >
               <path d="M6 3l5 5-5 5" />
             </svg>
-          </div>
+          </button>
         </div>
 
         <div className="flex items-center justify-between gap-4 border-t border-ink/10 px-6 py-2.5">
