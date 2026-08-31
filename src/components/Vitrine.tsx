@@ -400,8 +400,8 @@ export default function Vitrine() {
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-x-6 gap-y-12 pb-24 sm:grid-cols-2 lg:grid-cols-3">
-            {shown.map((m) => (
-              <ModelCard key={m.id} model={m} activeColors={colors} />
+            {shown.map((m, i) => (
+              <ModelCard key={m.id} model={m} activeColors={colors} priority={i === 0} />
             ))}
           </div>
         )}
@@ -413,9 +413,11 @@ export default function Vitrine() {
 function ModelCard({
   model,
   activeColors,
+  priority = false,
 }: {
   model: Model;
   activeColors: ColorId[];
+  priority?: boolean;
 }) {
   const preferred =
     model.variants.find((v) => activeColors.includes(v.color)) ??
@@ -446,6 +448,7 @@ function ModelCard({
             alt={`${model.name} — ${colorOf(variant.color).label}`}
             fill
             quality={85}
+            priority={priority}
             className="object-contain p-6 mix-blend-multiply transition-transform duration-700 ease-editorial group-hover:scale-105"
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           />
