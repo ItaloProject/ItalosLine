@@ -90,7 +90,7 @@ export default function Runway() {
               <div className="flex-1">
                 <figure className="group relative aspect-[4/5] w-full overflow-hidden border border-ink/15">
                   {g.video ? (
-                    <LazyLoopVideo src={g.video} className="h-full w-full object-cover" />
+                    <LazyLoopVideo src={g.video} mobileSrc={g.videoMobile} className="h-full w-full object-cover" />
                   ) : (
                     <Image
                       src={g.image}
@@ -162,21 +162,30 @@ function Spec({ k, v }: { k: string; v: string }) {
 }
 
 /**
- * Vídeo que só baixa e toca quando o cartão realmente entra na tela
- * (o trilho da passarela desloca via transform, então todos os
- * cartões existem no DOM o tempo todo — sem isso, os 4 vídeos
- * tocariam e consumiriam banda ao mesmo tempo, mesmo fora da tela).
+ * Vídeo lazy: só carrega quando entra na tela.
+ * Usa <source> com media query para servir a versão mobile (640px)
+ * em celulares e a versão desktop (1280px) em telas maiores.
  */
-function LazyLoopVideo({ src, className }: { src: string; className?: string }) {
+function LazyLoopVideo({
+  src,
+  mobileSrc,
+  className,
+}: {
+  src: string;
+  mobileSrc?: string;
+  className?: string;
+}) {
   const ref = useRef<HTMLVideoElement>(null);
   const [inView, setInView] = useState(false);
+  const loaded = useRef(false);
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    const io = new IntersectionObserver(([entry]) => setInView(entry.isIntersecting), {
-      threshold: 0.2,
-    });
+    const io = new IntersectionObserver(
+      ([entry]) => setInView(entry.isIntersecting),
+      { threshold: 0.2 }
+    );
     io.observe(el);
     return () => io.disconnect();
   }, []);
@@ -185,12 +194,22 @@ function LazyLoopVideo({ src, className }: { src: string; className?: string }) 
     const el = ref.current;
     if (!el) return;
     if (inView) {
-      if (!el.src) el.src = src;
+      if (!loaded.current) {
+        loaded.current = true;
+        el.load();
+      }
       void el.play().catch(() => undefined);
     } else {
       el.pause();
     }
-  }, [inView, src]);
+  }, [inView]);
 
-  return <video ref={ref} muted loop playsInline preload="none" className={className} />;
+  return (
+    <video ref={ref} muted loop playsInline preload="none" className={className}>
+      {mobileSrc && (
+        <source src={mobileSrc} media="(max-width: 640px)" type="video/mp4" />
+      )}
+      <source src={src} type="video/mp4" />
+    </video>
+  );
 }

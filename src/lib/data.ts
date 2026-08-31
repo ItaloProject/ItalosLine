@@ -13,6 +13,7 @@ export type Garment = {
   origin: string;
   image: string;
   video?: string;
+  videoMobile?: string;
 };
 
 export const heroPlate = U("photo-1594938298603-c8148c4dae35", 1600);
@@ -32,6 +33,7 @@ export const runway: Garment[] = [
     origin: "Como, Itália",
     image: U("photo-1602810318383-e386cc2a3ccf", 1400),
     video: "/videos/camisa-bianco-bege.mp4",
+    videoMobile: "/videos/camisa-bianco-bege-mobile.mp4",
   },
   {
     ref: "IL—107",
@@ -43,6 +45,7 @@ export const runway: Garment[] = [
     origin: "Como, Itália",
     image: U("photo-1598033129183-c4f50c736f10", 1400),
     video: "/videos/camisa-oxford-white.mp4",
+    videoMobile: "/videos/camisa-oxford-white-mobile.mp4",
   },
   {
     ref: "IL—122",
@@ -54,6 +57,7 @@ export const runway: Garment[] = [
     origin: "São Paulo, Brasil",
     image: U("photo-1594938328870-9623159c8c99", 1400),
     video: "/videos/polo-preto.mp4",
+    videoMobile: "/videos/polo-preto-mobile.mp4",
   },
   {
     ref: "IL—120",
@@ -65,6 +69,7 @@ export const runway: Garment[] = [
     origin: "São Paulo, Brasil",
     image: U("photo-1571455786673-9d9d6c194f90", 1400),
     video: "/videos/polo-off-white.mp4",
+    videoMobile: "/videos/polo-off-white-mobile.mp4",
   },
 ];
 
