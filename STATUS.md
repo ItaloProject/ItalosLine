@@ -41,13 +41,14 @@ npm run dev
 
 ## Histórico recente (mais novo primeiro)
 
-1. **`57de0c5`** — fix: reverte `overflow-x:hidden` do `<html>` (estava quebrando o `position:sticky` da Passarela — as camisas pararam de deslizar lateralmente ao rolar)
-2. **`a50721e`** — feat: passada geral de UX mobile (viewport/theme-color, tap-highlight removido, alvos de toque maiores na Vitrine, `touch-manipulation`, qualidade de imagem 100→85)
-3. **`89b1409`** — fix: overflow horizontal causado pela "camisa em trânsito" do Hero sem `width`/`height` no caminho que pula a animação de intro
-4. **`e9a0cf7`** — fix: responsividade mobile (CTA do Hero quebra linha, wordmark do rodapé não estoura mais, descrições do Arquivo/Passarela visíveis em touch — antes só apareciam com `:hover`)
-5. **`671cc58`** — perf: vídeos do Hero recomprimidos (17MB→4.2MB, corrigido `faststart`) + animação de entrada só roda 1x por sessão (`sessionStorage`)
-6. **`8572099`** — fix: trava scroll durante a animação de entrada da camisa
-7. **`0ffec62`** — commit inicial do projeto completo
+1. **`a231bb4`** — fix: botão do WhatsApp estava a 24px da borda (`right-6`), e o anel de pulso (`animate-ping`) escala 2x durante a animação — ultrapassava a viewport continuamente, causando overflow horizontal (faixa preta ao rolar no mobile). Corrigido afastando para `right-8/bottom-8`.
+2. **`57de0c5`** — fix: reverte `overflow-x:hidden` do `<html>` (estava quebrando o `position:sticky` da Passarela — as camisas pararam de deslizar lateralmente ao rolar)
+3. **`a50721e`** — feat: passada geral de UX mobile (viewport/theme-color, tap-highlight removido, alvos de toque maiores na Vitrine, `touch-manipulation`, qualidade de imagem 100→85)
+4. **`89b1409`** — fix: overflow horizontal causado pela "camisa em trânsito" do Hero sem `width`/`height` no caminho que pula a animação de intro
+5. **`e9a0cf7`** — fix: responsividade mobile (CTA do Hero quebra linha, wordmark do rodapé não estoura mais, descrições do Arquivo/Passarela visíveis em touch — antes só apareciam com `:hover`)
+6. **`671cc58`** — perf: vídeos do Hero recomprimidos (17MB→4.2MB, corrigido `faststart`) + animação de entrada só roda 1x por sessão (`sessionStorage`)
+7. **`8572099`** — fix: trava scroll durante a animação de entrada da camisa
+8. **`0ffec62`** — commit inicial do projeto completo
 
 ## Decisões / armadilhas já resolvidas (não repetir)
 
@@ -55,6 +56,7 @@ npm run dev
 - **Todo `<div>` com `position:fixed` precisa de `width`/`height` explícitos** (ou `inset`/`left+right`) — se depender de um filho com `w-full`/`h-full` sem isso, o navegador usa o tamanho intrínseco do conteúdo (ex: 1280px de um vídeo), estourando a largura da página inteira. Foi o caso do Hero (`flyerRef`).
 - **MP4s precisam de `-movflags +faststart`** (moov atom no início do arquivo) — sem isso o navegador baixa o vídeo inteiro antes de conseguir tocar qualquer frame.
 - **Conteúdo que só aparece em `:hover` fica invisível no mobile** (sem mouse, sem hover). Onde isso importava (descrição do Arquivo, ficha técnica da Passarela), foi trocado para: visível por padrão, e só vira efeito hover a partir de `lg:` (telas grandes/desktop).
+- **Elemento `fixed` perto da borda + animação `scale()` = overflow horizontal.** O botão de WhatsApp (`fixed right-6`) tinha um anel `animate-ping` que escala 2x em loop — isso ultrapassava a borda direita da viewport continuamente. Qualquer elemento fixo próximo da borda que anima `scale`/`transform` precisa de folga suficiente para o estado expandido não vazar da tela.
 - O usuário **pediu para não usar o browser preview** para verificar mudanças — todo trabalho de responsividade foi feito por auditoria de código, e a verificação visual é feita pelo próprio usuário, que manda screenshots.
 
 ## Pendências conhecidas
