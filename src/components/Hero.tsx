@@ -49,6 +49,8 @@ export default function Hero() {
 
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+    const unlockScroll = () => { document.body.style.overflow = ""; };
+
     const ctx = gsap.context(() => {
       if (reduced) {
         flyerVideo.pause();
@@ -62,6 +64,9 @@ export default function Hero() {
         );
         return;
       }
+
+      // Trava o scroll enquanto a camisa está em trânsito
+      document.body.style.overflow = "hidden";
 
       // ── Estados iniciais ─────────────────────────────────────────────
       gsap.set(tagRef.current, { yPercent: 110 });
@@ -119,7 +124,8 @@ export default function Hero() {
         // 4 ▸ Copy e CTA
         .to(copyRef.current,      { autoAlpha: 1, y: 0, duration: 0.8, ease: "power3.out" }, "+=2.4")
         .to(ctaRef.current,       { autoAlpha: 1, y: 0, duration: 0.8, ease: "power3.out" }, "-=0.6")
-        .to(bottomBarRef.current, { autoAlpha: 1, y: 0, duration: 0.7, ease: "power3.out" }, "-=0.55");
+        .to(bottomBarRef.current, { autoAlpha: 1, y: 0, duration: 0.7, ease: "power3.out" }, "-=0.55")
+        .call(unlockScroll);
 
       // ── Parallax ─────────────────────────────────────────────────────
       gsap.to(mastheadRef.current, {
@@ -134,6 +140,7 @@ export default function Hero() {
 
     return () => {
       ctx.revert();
+      unlockScroll(); // garante liberação se o componente desmontar antes do fim
       targetVideo.removeEventListener("ended", handleEnded);
       targetVideo.removeEventListener("timeupdate", handleTailLoop);
     };
